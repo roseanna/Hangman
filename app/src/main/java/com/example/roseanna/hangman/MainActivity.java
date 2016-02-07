@@ -13,7 +13,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public String hiddenWord        = generateWord();
-    public char[] currentWord;
     public char[] displayChar       = new char[hiddenWord.length()];
     public String displayString     = "";
     public int userGuesses          = hiddenWord.length()+5;
@@ -78,25 +77,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         y.setOnClickListener(this);
         z.setOnClickListener(this);
         reset.setOnClickListener(this);
-        currentWord = hiddenWord.toCharArray();
+
         resetDC();
 
     }
 
     public void resetDC(){
-        int curr = 0;
-        for (char single: currentWord) {
+        displayChar = new char[hiddenWord.length()];
+        for (int curr = 0; curr < hiddenWord.length(); curr++) {
             displayChar[curr] = '-';
-            curr++;
         }
     }
     @Override
     public void onClick(View v){
         if (v.getId() == R.id.reset){
-            resetDC();
             hiddenWord = generateWord();
+            Log.i("reset", hiddenWord);
             userGuesses = hiddenWord.length() + 5;
             isDone = false;
+            resetDC();
             setText();
         }
         else if (userGuesses==0 || isDone){
@@ -109,8 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (pos >= 0) {
                 for (int i = 0; i < hiddenWord.length(); i++){
                     char c = hiddenWord.charAt(i);
-                    if (c == chosen)
-                        displayChar[pos] = chosen;
+                    if (c == chosen) {
+                        Log.i("changing letter", String.valueOf(c));
+                        displayChar[i] = chosen;
+                    }
                 }
             }
             else
